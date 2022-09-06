@@ -106,8 +106,14 @@ void MainWindow::slotEditRecord()
         auto value = QInputDialog::getText(this, "Edit", "new value");
         m_xml_model->ModifyValue(field.row(), field.column(), value);
     } else {
-        auto value = QInputDialog::getText(this, "Edit", "new value (true / false)");
-        m_xml_model->ModifyValue(field.row(), field.column(), value == "true" ? true : false);
+        QInputDialog checkboxDialog;
+        QStringList list {"false", "true"};
+        checkboxDialog.setComboBoxItems(list);
+        checkboxDialog.setWindowTitle("Edit");
+
+        checkboxDialog.exec();
+        auto value = checkboxDialog.textValue() == "true" ? true : false;
+        m_xml_model->ModifyValue(field.row(), field.column(), value);
     }
 }
 
