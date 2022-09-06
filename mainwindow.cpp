@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_xml_reader, &XmlReader::signalReadyExport, this, &MainWindow::slotExport);
     connect(m_xml_reader, &XmlReader::signalFileReaded, this, &MainWindow::slotOnFileReaded);
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotCustomMenuRequested(QPoint)));
-    connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 }
 
 MainWindow::~MainWindow()
@@ -111,9 +110,10 @@ void MainWindow::slotEditRecord()
         checkboxDialog.setComboBoxItems(list);
         checkboxDialog.setWindowTitle("Edit");
 
-        checkboxDialog.exec();
-        auto value = checkboxDialog.textValue() == "true" ? true : false;
-        m_xml_model->ModifyValue(field.row(), field.column(), value);
+        if (checkboxDialog.exec()) {
+            auto value = checkboxDialog.textValue() == "true" ? true : false;
+            m_xml_model->ModifyValue(field.row(), field.column(), value);
+        }
     }
 }
 
